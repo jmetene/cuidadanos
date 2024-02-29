@@ -11,12 +11,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import javax.validation.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -66,8 +68,13 @@ public class ExpedienteController {
      * @return ExpedienteResponse
      */
     @PostMapping("/alta")
-    public ResponseEntity<?> altaExpediente(@Valid @RequestBody ExpedienteRequestDto expedienteInfo) {
+    public ResponseEntity<?> altaExpediente(@Valid @RequestBody ExpedienteRequestDto expedienteInfo, BindingResult result) {
         Expediente expediente;
+
+        if (result.hasErrors()) return ResponseEntity
+                .status(HttpStatus.PRECONDITION_FAILED)
+                .body("Hay un total " + result.getErrorCount() + " error(es) en los campos de entrada.");
+
         String dni = expedienteInfo.getDniNie();
         int tipoPrestacion = expedienteInfo.getTipoPrestacion();
 
@@ -180,7 +187,7 @@ public class ExpedienteController {
      * @return Lista de expedientes que cumplen con el criterio de búsqueda
      */
     @GetMapping("/buscarPorDniNie/{dniNie}")
-    public ResponseEntity<List<ExpedienteResponseDto>> buscarPorDni(@PathVariable @Valid String dniNie/*, BindingResult result*/) {
+    public ResponseEntity<List<ExpedienteResponseDto>> buscarPorDni(@PathVariable @Valid String dniNie) {
         List<Expediente> expedientes;
         List<ExpedienteResponseDto> responseDtoList;
         try {
