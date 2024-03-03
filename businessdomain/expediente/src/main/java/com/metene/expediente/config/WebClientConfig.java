@@ -21,7 +21,7 @@ public class WebClientConfig {
 
     @Value(value = "${cuidadano.service.name}")
     private String ciudadanoServiceName;
-    @Value(value = "${cuidadanos.api.base-path}")
+    @Value(value = "${ciudadanos.api.base-path}")
     private String cuidadanoAPIBasePath;
     @Value(value = "${apis.timeout}")
     private Long timeoutApi;

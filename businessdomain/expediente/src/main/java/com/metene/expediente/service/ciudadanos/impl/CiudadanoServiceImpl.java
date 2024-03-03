@@ -25,16 +25,16 @@ public class CiudadanoServiceImpl implements CiudadanoService {
     }
 
     @Override
-    public String altaCiudadanoByExpediente(CiudadanoDto dto) {
-        CiudadanoResponse response = null;
+    public Long altaCiudadanoByExpediente(CiudadanoDto dto) {
+        Long response = null;
         try {
-            Mono<CiudadanoResponse> ciudadanoMono = clientService.post(ALTAPATH, null, CiudadanoResponse.class, dto);
+            Mono<Long> ciudadanoMono = clientService.post(ALTAPATH, null, Long.class, dto);
             response = ciudadanoMono.block();
         } catch (Exception e) {
             LOGGER.error("CiudadanoServiceImpl::altaCuidadanoByExpediente: error: {}", e.getMessage());
         }
 
-        return Objects.requireNonNull(response).getDocumento();
+        return Objects.requireNonNull(response);
     }
 
     @Override
